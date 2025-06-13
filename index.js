@@ -41,7 +41,7 @@ const messages = [
 const response = await axios.post(
   'https://openrouter.ai/api/v1/chat/completions',
   {
-    model: "openai/gpt-4o-mini", // ← burada değiştiriyoruz
+    model: "openai/gpt-4.1-nano", // ← burada değiştiriyoruz
     messages,
     temperature: 0.7,
   },

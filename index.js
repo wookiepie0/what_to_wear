@@ -22,15 +22,17 @@ Elbiseler: ${prompt.dressCandidates?.join(', ') || 'yok'}
 Hava durumu: ${prompt.weather?.main?.temp} derece, ${prompt.weather?.weather?.[0]?.main || 'bilinmiyor'}.
 Stil tercihi: ${prompt.style}
 
-Lütfen aşağıdaki kurallara göre rastgele ama uygun bir kombin öner:
-- Elbise de varsa %50 ihtimalle "dress_id" döndür
-- Kombin de varsa %50 ihtimalle "upper_id" ve "lower_id" döndür
-- Sadece JSON olarak yanıt ver, başka hiçbir şey yazma.`;
+Kurallar:
+- Elbise varsa %50 ihtimalle sadece "dress_id" içeren bir JSON dön.
+- Kombin de varsa %50 ihtimalle hem "upper_id" hem "lower_id" içeren bir JSON dön.
+- En az bir alt ve bir üst varsa, her zaman kombin öner (sadece üst ya da alt önermek yok).
+- Cevabın sadece JSON formatında olmalı. Başka açıklama ya da yorum yazma.
+- ID'ler doğrudan kıyafet ID'si olarak dönmeli (örnek: "upper_id": "abc123").`;
 const messages = [
-  {
-    role: 'system',
-    content: `Sen bir stil asistanısın. Kullanıcının dolabındaki kıyafetlerden mevsime ve stile uygun bir kombin öner.`
-  },
+{
+  role: 'system',
+  content: `Sen bir stil asistanısın. Görevin kullanıcıya hem görsel hem işlevsel açıdan uygun kombin önermek. Asla eksik kombin önermemelisin.`
+},
   {
     role: 'user',
     content: promptAsText // ❗ Burada artık string olacak

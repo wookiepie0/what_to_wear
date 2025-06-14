@@ -27,15 +27,15 @@ Kurallar:
 - Kombin de varsa %50 ihtimalle hem "upper_id" hem "lower_id" içeren bir JSON dön.
 - En az bir alt ve bir üst varsa, her zaman kombin öner (sadece üst ya da alt önermek yok).
 - Cevabın sadece JSON formatında olmalı. Başka açıklama ya da yorum yazma.
-- ID'ler doğrudan kıyafet ID'si olarak dönmeli (örnek: "upper_id": "abc123").;
+- ID'ler doğrudan kıyafet ID'si olarak dönmeli (örnek: "upper_id": "abc123").`;
 const messages = [
-{
-  role: 'system',
-  content: Sen bir stil asistanısın. Görevin kullanıcıya hem görsel hem işlevsel açıdan uygun kombin önermek. Asla eksik kombin önermemelisin.`
-},
+  {
+    role: 'system',
+    content: `Sen bir stil asistanısın. Görevin kullanıcıya hem görsel hem işlevsel açıdan uygun kombin önermek. Asla eksik kombin önermemelisin.`
+  },
   {
     role: 'user',
-    content: promptAsText // ❗ Burada artık string olacak
+    content: promptAsText
   }
 ];
 

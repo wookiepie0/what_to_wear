@@ -13,15 +13,29 @@ const PORT = 3000;
 app.post('/suggest', async (req, res) => {
 const { prompt } = req.body;
 
-const upperList = prompt.upperCandidates?.map(item => `- ID: ${item.id}, Ad: ${item.name}, Renk: ${item.color || 'bilinmiyor'}`).join('\n') || 'yok';
-const lowerList = prompt.lowerCandidates?.map(item => `- ID: ${item.id}, Ad: ${item.name}, Renk: ${item.color || 'bilinmiyor'}`).join('\n') || 'yok';
-const dressList = prompt.dressCandidates?.map(item => `- ID: ${item.id}, Ad: ${item.name}, Renk: ${item.color || 'bilinmiyor'}`).join('\n') || 'yok';
+const upperList = prompt.upperCandidates?.map(item =>
+  `- ID: ${item.id}, Ad: ${item.name}, Renk: ${item.color || 'bilinmiyor'}`
+).join('\n') || 'yok';
+
+const lowerList = prompt.lowerCandidates?.map(item =>
+  `- ID: ${item.id}, Ad: ${item.name}, Renk: ${item.color || 'bilinmiyor'}`
+).join('\n') || 'yok';
+
+const dressList = prompt.dressCandidates?.map(item =>
+  `- ID: ${item.id}, Ad: ${item.name}, Renk: ${item.color || 'bilinmiyor'}`
+).join('\n') || 'yok';
 
 const promptAsText = `Kullanıcının dolabında şu kıyafetler var:
 
-Üst kıyafetler: ${upperList}
-Alt kıyafetler: ${lowerList}
-Elbiseler: ${dressList}
+Üst kıyafetler:
+${upperList}
+
+Alt kıyafetler:
+${lowerList}
+
+Elbiseler:
+${dressList}
+
 Hava durumu: ${prompt.weather?.main?.temp} derece, ${prompt.weather?.weather?.[0]?.main || 'bilinmiyor'}
 Stil tercihi: ${prompt.style}
 
@@ -30,9 +44,12 @@ Kurallar:
 - Elbise varsa %50 ihtimalle sadece "dress_id" içeren bir JSON dön.
 - Kombin de varsa %50 ihtimalle hem "upper_id" hem "lower_id" içeren bir JSON dön.
 - En az bir alt ve bir üst varsa, her zaman kombin öner (sadece üst ya da alt önermek yok).
-- Cevabın sadece JSON formatında olmalı. Başka açıklama ya da yorum yazma.
-- JSON'da her zaman ID kullan: örnek "upper_id": "abc123"
-- Sakın kıyafet adı yazma, sadece ID yaz.`;  
+- Cevabın sadece **geçerli JSON formatında** olmalı. Başka açıklama ya da yorum yazma.
+- **Sadece ID değeri dön. Sakın kıyafet adı, tip ya da renk yazma.**
+- **ID’ler yukarıdaki listede geçen ID’lerden biri olmalı.**
+- Yanıt örneği (sadece biri olacak): 
+  {"dress_id": "abc123"} veya {"upper_id": "xyz456", "lower_id": "pqr789"}.
+`;  
 const messages = [
   {
     role: 'system',

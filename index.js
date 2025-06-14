@@ -13,17 +13,9 @@ const PORT = 3000;
 app.post('/suggest', async (req, res) => {
 const { prompt } = req.body;
 
-const upperList = prompt.upperCandidates?.map(item =>
-  `- ID: ${item.id}, Ad: ${item.name}, Renk: ${item.color || 'bilinmiyor'}`
-).join('\n') || 'yok';
-
-const lowerList = prompt.lowerCandidates?.map(item =>
-  `- ID: ${item.id}, Ad: ${item.name}, Renk: ${item.color || 'bilinmiyor'}`
-).join('\n') || 'yok';
-
-const dressList = prompt.dressCandidates?.map(item =>
-  `- ID: ${item.id}, Ad: ${item.name}, Renk: ${item.color || 'bilinmiyor'}`
-).join('\n') || 'yok';
+const upperList = prompt.upperCandidates?.map(item => `- ID: ${item.id}, Tip: ${item.tip}, Renk: ${item.renk || 'bilinmiyor'}`).join('\n') || 'yok';
+const lowerList = prompt.lowerCandidates?.map(item => `- ID: ${item.id}, Tip: ${item.tip}, Renk: ${item.renk || 'bilinmiyor'}`).join('\n') || 'yok';
+const dressList = prompt.dressCandidates?.map(item => `- ID: ${item.id}, Tip: ${item.tip}, Renk: ${item.renk || 'bilinmiyor'}`).join('\n') || 'yok';
 
 const promptAsText = `Kullanıcının dolabında şu kıyafetler var:
 
@@ -46,8 +38,8 @@ Kurallar:
 - En az bir alt ve bir üst varsa, %50 ihtimalle kombin öner ("upper_id" ve "lower_id").
 - Eğer kombin oluşturulamıyorsa ve elbise mevcutsa, mutlaka elbise öner.
 - Cevabın sadece JSON formatında olmalı. Başka açıklama, yorum ya da metin yazma.
-- Döneceğin ID'ler yukarıdaki kıyafetlerden alınmalı.
-
+- Tip ve renk bilgilerini dikkate al. Örneğin, "siyah pantolon" ile "beyaz tişört" uyumludur.
+- Yanıtta her zaman ID kullan. Sakın tip ya da ad yazma.
 Örnek dönüşler:
 { "upper_id": "abc123", "lower_id": "xyz789" } veya { "dress_id": "def456" }`;
   

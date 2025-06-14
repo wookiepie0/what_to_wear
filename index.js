@@ -19,6 +19,8 @@ const dressList = prompt.dressCandidates?.map(item => `- ID: ${item.id}, Ad: ${i
 
 const promptAsText = `Kullanıcının dolabında şu kıyafetler var:
 
+Her kıyafet, ID, ad ve renk bilgisiyle listelenmiştir. Renk uyumuna dikkat ederek seçim yap.
+
 Üst kıyafetler:
 ${upperList}
 

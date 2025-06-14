@@ -13,19 +13,12 @@ const PORT = 3000;
 app.post('/suggest', async (req, res) => {
 const { prompt } = req.body;
 
-const upperList = prompt.upperCandidates?.map(item =>
-  `- ID: ${item.id}, Ad: ${item.name}, Renk: ${item.color || 'bilinmiyor'}`
-).join('\n') || 'yok';
+const upperList = prompt.upperCandidates?.map(item => `- ID: ${item.id}, Ad: ${item.name}, Renk: ${item.color || 'bilinmiyor'}`).join('\n') || 'yok';
+const lowerList = prompt.lowerCandidates?.map(item => `- ID: ${item.id}, Ad: ${item.name}, Renk: ${item.color || 'bilinmiyor'}`).join('\n') || 'yok';
+const dressList = prompt.dressCandidates?.map(item => `- ID: ${item.id}, Ad: ${item.name}, Renk: ${item.color || 'bilinmiyor'}`).join('\n') || 'yok';
 
-const lowerList = prompt.lowerCandidates?.map(item =>
-  `- ID: ${item.id}, Ad: ${item.name}, Renk: ${item.color || 'bilinmiyor'}`
-).join('\n') || 'yok';
-
-const dressList = prompt.dressCandidates?.map(item =>
-  `- ID: ${item.id}, Ad: ${item.name}, Renk: ${item.color || 'bilinmiyor'}`
-).join('\n') || 'yok';
-
-const promptAsText = `Kullanıcının dolabında şu kıyafetler var:
+const promptAsText = `
+Kullanıcının dolabında şu kıyafetler var:
 
 Üst kıyafetler:
 ${upperList}
@@ -40,20 +33,20 @@ Hava durumu: ${prompt.weather?.main?.temp} derece, ${prompt.weather?.weather?.[0
 Stil tercihi: ${prompt.style}
 
 Kurallar:
-- Renk uyumu estetik olarak önemlidir. Uyumlu renk kombinasyonlarını tercih et.
-- Elbise varsa %50 ihtimalle sadece "dress_id" içeren bir JSON dön.
-- Kombin de varsa %50 ihtimalle hem "upper_id" hem "lower_id" içeren bir JSON dön.
-- En az bir alt ve bir üst varsa, her zaman kombin öner (sadece üst ya da alt önermek yok).
-- Cevabın sadece **geçerli JSON formatında** olmalı. Başka açıklama ya da yorum yazma.
-- **Sadece ID değeri dön. Sakın kıyafet adı, tip ya da renk yazma.**
-- **ID’ler yukarıdaki listede geçen ID’lerden biri olmalı.**
-- Yanıt örneği (sadece biri olacak): 
-  {"dress_id": "abc123"} veya {"upper_id": "xyz456", "lower_id": "pqr789"}.
-`;  
+- Eğer elbise de kombin de uygunsa, **yalnızca birini seç** ve **sadece onu öner**.
+- Bu kararı verirken renk uyumu, stil ve hava durumuna dikkat et.
+- Eğer kombin öneriyorsan yalnızca şu formatta JSON dön:
+  { "upper_id": "abc123", "lower_id": "xyz789" }
+- Eğer elbise öneriyorsan yalnızca şu formatta JSON dön:
+  { "dress_id": "def456" }
+- Asla hem elbise hem kombin aynı anda dönme. Kullanıcıya **tek öneri** sun.
+- JSON dışında herhangi bir açıklama, yorum veya süsleme yazma.
+- Tüm ID'ler Supabase veritabanındaki gerçek kıyafet ID'leri olmalı.
+`;
 const messages = [
   {
     role: 'system',
-    content: `Sen bir stil asistanısın. Görevin kullanıcıya hem görsel hem işlevsel açıdan uygun kombin önermek. Renk uyumu ve kullanıcı tercihini dikkate almalısın. Asla eksik kombin önermemelisin.`
+    content: `Sen bir stil asistanısın. Kullanıcıya sadece bir tane, stiline ve hava durumuna uygun en iyi kıyafet önerisi yap.`
   },
   {
     role: 'user',
